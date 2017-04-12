@@ -1,8 +1,8 @@
 import os.path
 import sys
 
-from pyzcash.rpc.ZDaemon import *
-from pyzcash.settings import *
+from pyZcash.rpc.ZDaemon import *
+from pyZcash.settings import *
 
 
 def test_daemon():
@@ -27,7 +27,7 @@ def test_daemon():
 	print zd.sendRawTx(hextx.get('hex'))
 
 	print pourtx
-	print hextx	
+	print hextx
 
 #	print zd.sendNoteToAddress(encnote, TEST_ZSECRET, TEST_TADDR, 0.33, TEST_ZADDR)
 
@@ -36,4 +36,3 @@ def test_daemon():
 
 if __name__ == "__main__":
 	test_daemon()
-
