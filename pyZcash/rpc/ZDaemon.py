@@ -10,7 +10,6 @@ class ZDaemon(object):
 	def __init__(self, network=NETWORK, user=RPCUSER, password=RPCPASSWORD, timeout=TIMEOUT):
 		#TODO: check utf safety
 		self.network = network
-		print "Network: ", self.network
 		self.user = user.encode('utf8')
 		self.password = password.encode('utf8')
 		self.timeout = timeout
@@ -40,19 +39,6 @@ class ZDaemon(object):
 
 		return resp['result']
 
-	def _get_response(self):
-        http_response = self.__conn.getresponse()
-        if http_response is None:
-            raise JSONRPCException({
-                'code': -342, 'message': 'missing HTTP response from server'})
-
-        responsedata = http_response.read().decode('utf8')
-        response = json.loads(responsedata, parse_float=decimal.Decimal)
-        if "error" in response and response["error"] is None:
-            log.debug("<-%s- %s"%(response["id"], json.dumps(response["result"], default=EncodeDecimal)))
-        else:
-            log.debug("<-- "+responsedata)
-        return response
 
 	#Block Info
 	def getBlockHash(self, blockheight):
@@ -64,7 +50,7 @@ class ZDaemon(object):
 	def getBlockByHeight(self, blockheight):
 		return self.getBlockByHash(self.getBlockHash(blockheight))
 
-	#Network Info
+	# Custom methods to get Network Info
 	def getNetworkHeight(self):
 		return self._call('getblockcount')
 
@@ -80,29 +66,25 @@ class ZDaemon(object):
 	def getConnectionCount(self):
 		return self._call('getconnectioncount')
 
-	#Wallet Info (transparent)
-	def getTotalBalance(self, account=""):
-		if account:
-			return self._call('getbalance', account)
-		else:
-			return self._call('getbalance')
 
-	def getUnspentTxs(self, minconf=1):
+	# Wallet Info (transparent)
+	def getbalance(self):
+		return self._call('getbalance')
+
+	def listunspent(self, minconf=1):
 		return self._call('listunspent', minconf)
 
 	#Raw Txs
-	def getTxInfo(self, txid):
+	def gettransaction(self, txid):
 		return self._call('gettransaction', txid)
 
 	# taddr methods
-	def getNewAddress(self, account=""):
-		if account:
-			return self._call('getnewaddress', account)
-		else:
-			return self._call('getnewaddress')
+	def getnewaddress(self):
+		return self._call('getnewaddress')
 
-	def sendTransparent(self, taddress, amount):
+	def sendtoaddress(self, taddress, amount):
 		return self._call('sendtoaddress', taddress, amount)
+
 
 	# zaddr methods
 	def z_getnewaddress(self):

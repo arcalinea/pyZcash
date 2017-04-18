@@ -2,9 +2,8 @@ import os.path
 import sys
 import time
 
-from pyZcash.rpc.ZDaemon import *
-from pyZcash.settings import *
-
+from rpc.ZDaemon import *
+from settings import *
 
 #Sweeps all unspent transparent txs, cleaning them through a temporary zaddr.
 def clean_and_collect_all(taddress=TEST_TADDR, fee=DEFAULT_FEE):
@@ -17,33 +16,23 @@ def clean_and_collect_all(taddress=TEST_TADDR, fee=DEFAULT_FEE):
 		exit()
 
 	print "Generating temporary zaddress for tx..."
-	zaddress_full = zd.getNewRawZAddress()
-	zaddress = zaddress_full.get('zcaddress')
-	zsecret = zaddress_full.get('zcsecretkey')
+	# rewrite this
+	zaddr = zd.z_getnewaddress()
 
-	print "Generated: " + zaddress
-	print "Secret: " + zsecret
+	print "Generated zaddress: " + zaddr
 
 	print "Gathering and transmitting unspent txs..."
 	print "Please wait..."
-	notes =  zd.pourAllUnspentTxs(zaddress)
-	encnote1 = notes.get('encryptednote1')
+	# rewrite this
+	shielded_txs =  zd.sweepAllUnspentTxs(zaddress)
 
-
-	print "Found a note to use: \n--------------------------------------------\n" + encnote1 + "\n--------------------------------------------"
-
-	print "Waiting for note to show in blockchain before spendable..."
+	print "Sending unspent txs to shieleded address..."
 	print "This may take a few minutes..."
+
+	# rewrite this
 	while zd.receiveTx(zsecret, encnote1).get('exists') is not True:
 		print zd.receiveTx(zsecret,encnote1)
 		time.sleep(5)
-
-	print "Found note in blockchain!"
-	total = zd.receiveTx(zsecret, encnote1).get('amount')
-	print "Examined note and found total: " + str(total)
-
-	print "Spending note to target transparent address..."
-        tx_response = zd.sendNoteToAddress(encnote1, zsecret, taddress, total-fee, zaddress)
 
 	print "Sent! Check " + taddress + " shortly."
 
@@ -51,11 +40,11 @@ def clean_and_collect_all(taddress=TEST_TADDR, fee=DEFAULT_FEE):
 if __name__ == "__main__":
 	if len(sys.argv) <= 1:
 		print "Usage: python sweep_all.py <transparent address>"
-		print "Ex: python sweep_all.py mfu8LbjAq15zmCDLCwUuay9cVc2FcGuY4d"
+		print "Ex: python sweep_all.py tm9yooiTA5bTheUD6VgQg2ya8j49XDhrtNW"
 		exit()
 
 	taddr = sys.argv[1]
-	if len(taddr) != len('mfu8LbjAq15zmCDLCwUuay9cVc2FcGuY4d'):
+	if len(taddr) != len('tm9yooiTA5bTheUD6VgQg2ya8j49XDhrtNW'):
 		print "That doesn't look like a transparent address.. Maybe you are trying to use a zaddress?"
 		exit()
 
