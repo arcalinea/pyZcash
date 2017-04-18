@@ -1,7 +1,12 @@
 import os, re
-#ZCASH RPC
-# Address and port of local zcashd testnet rpc
-ZURL = "http://localhost:18232"
+
+# Address and port of local zcashd testnet RPC ports
+testnet = "http://localhost:18232" #testnet
+mainnet = "http://localhost:8232"
+regtest = "http://localhost:18444"
+# Default is testnet
+NETWORK = testnet
+
 #Timeout needs to be high for any pour operations
 TIMEOUT = 600
 #Default fee to use on network for txs.
