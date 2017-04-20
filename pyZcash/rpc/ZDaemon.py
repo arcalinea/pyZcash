@@ -89,11 +89,14 @@ class ZDaemon(object):
 		return self._call('listunspent')
 
 	# Custom method to find a taddr with spendable utxos for z_sendmany
-	def findTaddrWithUnspent(self):
+	def find_taddr_with_unspent(self):
 		unspent = self._call('listunspent')
-		for tx in unspent:
-			if tx['spendable'] == True and tx['amount'] > 0.1:
-				return tx['address']
+		for utxo in unspent:
+			if utxo['spendable'] == True and utxo['amount'] > 0.1:
+				# Check that it's not a coinbase tx
+				tx = zd.gettransaction(utxo['txid'])
+				if 'generated' not in tx:
+					return tx['address']
 
 	# zaddr methods
 	def z_getnewaddress(self):
