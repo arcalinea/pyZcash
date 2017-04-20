@@ -98,6 +98,22 @@ class ZDaemon(object):
 				if 'generated' not in tx:
 					return tx['address']
 
+	def sweep_coinbase(self, zaddr):
+		cb = []
+		utxos = self.listunspent()
+		for utxo in utxos:
+			print "UTXO:", utxo
+		    tx = self.gettransaction(utxo['txid'])
+		    if 'generated' in tx:
+				print "Generated in tx"
+		        if tx['generated'] == 'true':
+					print "Generated is true"
+		            cb.append(utxo)
+		print "COINBASE REWARDS", cb
+		for coin in cb:
+		    amount = coin['amount'] - 0.0001
+		    opid = self.z_sendmany(coin['address'], zaddr, amount)
+
 	# zaddr methods
 	def z_getnewaddress(self):
 		return self._call('z_getnewaddress')
