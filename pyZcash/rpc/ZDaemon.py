@@ -85,6 +85,15 @@ class ZDaemon(object):
 	def sendtoaddress(self, taddress, amount):
 		return self._call('sendtoaddress', taddress, amount)
 
+	def listunspent(self):
+		return self._call('listunspent')
+
+	# Custom method to find a taddr with spendable utxos for z_sendmany
+	def findTaddrWithUnspent(self):
+		unspent = self._call('listunspent')
+		for tx in unspent:
+			if tx['spendable'] == True and tx['amount'] > 0.1:
+				return tx['address']
 
 	# zaddr methods
 	def z_getnewaddress(self):
@@ -101,7 +110,6 @@ class ZDaemon(object):
 
 	def z_getoperationresult(self, opid):
 		return self._call('z_getoperationresult', ["{0}".format(opid)])
-
 
 	# With addition of encrypted memo field
 	def z_sendmany(self, sender, receiver, amount=0.0001, memo=''):
