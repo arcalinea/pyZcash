@@ -96,6 +96,13 @@ class ZDaemon(object):
 	def z_listreceivedbyaddress(self, zaddr, minconf=1):
 		return self._call('z_listreceivedbyaddress', zaddr, minconf)
 
+	def z_getoperationstatus(self, opid):
+		return self._call('z_getoperationstatus', ["{0}".format(opid)])
+
+	def z_getoperationresult(self, opid):
+		return self._call('z_getoperationresult', ["{0}".format(opid)])
+
+
 	# With addition of encrypted memo field
 	def z_sendmany(self, sender, receiver, amount=0.0001, memo=''):
 		amts_array = []

@@ -2,8 +2,8 @@ import os.path
 import sys
 import time
 
-from rpc.ZDaemon import *
-from settings import *
+from pyZcash.rpc.ZDaemon import *
+from pyZcash.settings import *
 
 #Sweeps all unspent transparent txs, cleaning them through a temporary zaddr.
 def clean_and_collect_all(taddress=TEST_TADDR, fee=DEFAULT_FEE):
