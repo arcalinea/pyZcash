@@ -113,6 +113,9 @@ class ZDaemon(object):
 			print "Status: ", status[0]['status']
 
 	# zaddr methods
+	def z_gettotalbalance(self):
+		return self._call('z_gettotalbalance')
+
 	def z_getnewaddress(self):
 		return self._call('z_getnewaddress')
 
