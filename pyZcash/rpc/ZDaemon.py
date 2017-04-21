@@ -102,17 +102,15 @@ class ZDaemon(object):
 		cb = []
 		utxos = self.listunspent()
 		for utxo in utxos:
-			print "UTXO:", utxo
 		    tx = self.gettransaction(utxo['txid'])
-		    if 'generated' in tx:
-				print "Generated in tx"
-		        if tx['generated'] == 'true':
-					print "Generated is true"
-		            cb.append(utxo)
-		print "COINBASE REWARDS", cb
+		    if 'generated' in tx and tx['generated'] == True:
+	            cb.append(utxo)
 		for coin in cb:
 		    amount = coin['amount'] - 0.0001
 		    opid = self.z_sendmany(coin['address'], zaddr, amount)
+			print "OPID of z_sendmany: ", opid
+			status = self.z_getoperationstatus(opid)
+			print "Status: ", status[0]['status']
 
 	# zaddr methods
 	def z_getnewaddress(self):
