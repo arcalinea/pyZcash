@@ -20,17 +20,11 @@ class ZDaemon(object):
 				'params': args,
 				'id': self.id_count})
 
-		print "JSONDATA: ", jsondata
-
 		r = requests.post(self.network, auth=(self.user,self.password), data=jsondata, timeout=self.timeout)
 
 		self.id_count += 1
 
-		# print "Bare text: ", r.text
-
 		resp = json.loads(r.text)
-
-		# print "Bare response: %s \n\n" % resp
 
 		#TODO: deal with errors better.
 		error = resp['error']
