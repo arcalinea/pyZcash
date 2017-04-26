@@ -26,6 +26,7 @@ class ZDaemon(object):
 
 		resp = json.loads(r.text)
 
+k
 		#TODO: deal with errors better.
 		error = resp['error']
 		if error:
@@ -96,12 +97,12 @@ class ZDaemon(object):
 		cb = []
 		utxos = self.listunspent()
 		for utxo in utxos:
-		    tx = self.gettransaction(utxo['txid'])
-		    if 'generated' in tx and tx['generated'] == True:
-	            cb.append(utxo)
+			tx = self.gettransaction(utxo['txid'])
+			if 'generated' in tx and tx['generated'] == True:
+				cb.append(utxo)
 		for coin in cb:
-		    amount = coin['amount'] - 0.0001
-		    opid = self.z_sendmany(coin['address'], zaddr, amount)
+			amount = coin['amount'] - 0.0001
+			opid = self.z_sendmany(coin['address'], zaddr, amount)
 			print "OPID of z_sendmany: ", opid
 			status = self.z_getoperationstatus(opid)
 			print "Status: ", status[0]['status']
