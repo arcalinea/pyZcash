@@ -26,7 +26,6 @@ class ZDaemon(object):
 
 		resp = json.loads(r.text)
 
-k
 		#TODO: deal with errors better.
 		error = resp['error']
 		if error:
