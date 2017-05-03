@@ -72,6 +72,14 @@ class ZDaemon(object):
 	def gettransaction(self, txid):
 		return self._call('gettransaction', txid)
 
+	def getrawtransaction(self, txid, verbose=0):
+		# default verbose=0 returns serialized, hex-encoded data
+		# verbose=1, returns a JSON obj of tx
+		return self._call('getrawtransaction', txid, verbose)
+
+	def decoderawtransaction(self, txhex):
+		return self.call('decoderawtransaction', txhex)
+
 	# taddr methods
 	def getnewaddress(self):
 		return self._call('getnewaddress')
