@@ -108,8 +108,9 @@ class ZDaemon(object):
 			if 'generated' in tx and tx['generated'] == True:
 				cb.append(utxo)
 		for coin in cb:
-			amount = coin['amount'] - 0.0001
-			opid = self.z_sendmany(coin['address'], zaddr, amount)
+			fee = 0.0005
+			amount = coin['amount']
+			opid = self.z_sendmany(coin['address'], zaddr, amount, '', fee)
 			print "OPID of z_sendmany: ", opid
 			status = self.z_getoperationstatus(opid)
 			print "Status: ", status[0]['status']
@@ -134,7 +135,7 @@ class ZDaemon(object):
 		return self._call('z_getoperationresult', ["{0}".format(opid)])
 
 	# With addition of encrypted memo field
-	def z_sendmany(self, sender, receiver, amount=0.0001, memo=''):
+	def z_sendmany(self, sender, receiver, amount=0.0001, memo='', fee=0.0001):
 		amts_array = []
 		if memo == '':
 			amounts = {"address": receiver, "amount": amount}
@@ -142,4 +143,4 @@ class ZDaemon(object):
 			memo = memo.encode('hex')
 			amounts = {"address": receiver, "amount": amount, "memo": memo}
 		amts_array.append(amounts)
-		return self._call('z_sendmany', sender, amts_array)
+		return self._call('z_sendmany', sender, amts_array, 1, fee)
