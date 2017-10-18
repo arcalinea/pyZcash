@@ -101,19 +101,15 @@ class ZDaemon(object):
 					return tx['address']
 
 	def sweep_coinbase(self, zaddr):
-		cb = []
+		addrs = []
 		utxos = self.listunspent()
 		for utxo in utxos:
-			tx = self.gettransaction(utxo['txid'])
-			if 'generated' in tx and tx['generated'] == True:
-				cb.append(utxo)
-		for coin in cb:
-			fee = 0.0005
-			amount = coin['amount']
-			opid = self.z_sendmany(coin['address'], zaddr, amount, '', fee)
-			print "OPID of z_sendmany: ", opid
-			status = self.z_getoperationstatus(opid)
-			print "Status: ", status[0]['status']
+			if 'generated' in utxo and utxo['generated'] == True:
+				if utxo['address'] not in addrs:
+					addrs.append(utxo['address'])
+		for addr in addrs:
+			res = self._call('z_shieldcoinbase', addr, zaddr)
+			print res
 
 	# zaddr methods
 	def z_gettotalbalance(self):
